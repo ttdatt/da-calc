@@ -15,6 +15,7 @@ class MathExpression extends _$MathExpression {
 
   void add(String char) {
     state = state + char;
+    print('add: $state');
   }
 
   void clear() {
@@ -48,46 +49,41 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomeWidget extends ConsumerWidget {
+class MyHomeWidget extends StatelessWidget {
   const MyHomeWidget({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final String expression = ref.watch(mathExpressionProvider);
-    print(expression);
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Basic Calculator'),
         ),
         body: Column(
           children: [
+            const ExpressionDisplay(),
             Row(
               children: [
                 CalculatorButton(
                   text: 'C',
-                  onPressed: () {
+                  onPressed: (ref) {
                     ref.read(mathExpressionProvider.notifier).clear();
                   },
                   textStyle:
                       const TextStyle(fontSize: 32, color: Colors.indigo),
                 ),
-                CalculatorButton(
+                const CalculatorButton(
                   text: '()',
-                  onPressed: () {},
-                  textStyle:
-                      const TextStyle(fontSize: 32, color: Colors.indigo),
+                  textStyle: TextStyle(fontSize: 32, color: Colors.indigo),
                 ),
                 const CalculatorButton(
                   text: '%',
                   char: '%',
                   textStyle: TextStyle(fontSize: 32, color: Colors.indigo),
                 ),
-                CalculatorButton(
+                const CalculatorButton(
                   text: '\u00F7',
                   char: '/',
-                  onPressed: () {},
-                  textStyle:
-                      const TextStyle(fontSize: 44, color: Colors.indigo),
+                  textStyle: TextStyle(fontSize: 44, color: Colors.indigo),
                 ),
               ],
             ),
@@ -171,7 +167,7 @@ class MyHomeWidget extends ConsumerWidget {
                 ),
                 CalculatorButton(
                   text: '=',
-                  onPressed: () {
+                  onPressed: (ref) {
                     ref.read(mathExpressionProvider.notifier).calculate();
                   },
                   textStyle:
@@ -181,6 +177,19 @@ class MyHomeWidget extends ConsumerWidget {
             )
           ],
         ));
+  }
+}
+
+class ExpressionDisplay extends ConsumerWidget {
+  const ExpressionDisplay({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    String expression = ref.watch(mathExpressionProvider);
+
+    return Card(
+      child: Text(expression),
+    );
   }
 }
 
@@ -194,7 +203,7 @@ class CalculatorButton extends ConsumerWidget {
 
   final String text;
   final String? char;
-  final void Function()? onPressed;
+  final void Function(WidgetRef ref)? onPressed;
   final TextStyle? textStyle;
 
   @override
@@ -205,7 +214,7 @@ class CalculatorButton extends ConsumerWidget {
           style: TextButton.styleFrom(backgroundColor: Colors.white70),
           onPressed: () {
             if (onPressed != null) {
-              onPressed?.call();
+              onPressed?.call(ref);
             } else {
               ref.read(mathExpressionProvider.notifier).add(char ?? text);
             }
