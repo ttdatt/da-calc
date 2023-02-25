@@ -143,18 +143,45 @@ class ExpressionDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _textController = TextEditingController();
-    _textController.text = 'vcl';
+    final expressionController = TextEditingController();
+    final resultController = TextEditingController();
+
+    expressionController.text =
+        context.read<CalculatorCubit>().state.expression;
     return Card(
-      child: BlocBuilder<CalculatorCubit, String>(builder: (context, state) {
-        return TextField(
-          controller: _textController,
-          decoration: const InputDecoration(
-            border: InputBorder.none,
-            hintText: 'Enter a search term',
-          ),
-        );
-      }),
+      child: BlocListener<CalculatorCubit, MathExpression>(
+        listener: ((context, state) {
+          expressionController.text =
+              context.read<CalculatorCubit>().state.expression;
+          resultController.text = context.read<CalculatorCubit>().state.result;
+        }),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: TextField(
+                autofocus: true,
+                maxLines: 1,
+                textAlign: TextAlign.right,
+                style: const TextStyle(fontSize: 40),
+                controller: expressionController,
+                decoration: const InputDecoration(
+                    border: InputBorder.none, hintText: ''),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: TextField(
+                textAlign: TextAlign.right,
+                style: const TextStyle(fontSize: 30, color: Colors.grey),
+                controller: resultController,
+                decoration: const InputDecoration(
+                    border: InputBorder.none, hintText: ''),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
