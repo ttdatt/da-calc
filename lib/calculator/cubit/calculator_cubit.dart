@@ -8,9 +8,23 @@ class MathExpression {
   MathExpression(this.expression, this.result);
 }
 
-String trimNonNumber(String expression) {
-  for (var i = expression.length - 1; i >= 0; i--) {}
-  return '';
+bool isLastCharacterNaN(String expression) {
+  if (expression.isEmpty) return false;
+
+  var lastChar = expression[expression.length - 1];
+  if (lastChar == '%') return false;
+
+  try {
+    return num.parse(lastChar) is! int;
+  } catch (e) {
+    return true;
+  }
+}
+
+bool isLastCharacterPercentSign(String expression) {
+  if (expression.isEmpty) return false;
+  var lastChar = expression[expression.length - 1];
+  return lastChar == '%';
 }
 
 class CalculatorCubit extends Cubit<MathExpression> {
@@ -23,10 +37,19 @@ class CalculatorCubit extends Cubit<MathExpression> {
   void clear() => emit(MathExpression('', ''));
 
   void add(String char) {
-    if (char == '%' && state.expression[state.expression.length - 1] == '%') {
+    if (isLastCharacterNaN(state.expression) && isLastCharacterNaN(char)) {
       return;
     }
+    if (isLastCharacterPercentSign(state.expression) &&
+        isLastCharacterPercentSign(char)) return;
+
     var newExpression = state.expression + char;
+
+    if (newExpression.length == 1) {
+      emit(MathExpression(newExpression, ''));
+      return;
+    }
+
     dynamic result;
     try {
       var finalExpression = newExpression.replaceAll('%', '/100');
@@ -49,16 +72,15 @@ class CalculatorCubit extends Cubit<MathExpression> {
     Expression exp = p.parse(finalState);
     var result = exp.evaluate(EvaluationType.REAL, cm);
     result = f.format(result);
-    emit(MathExpression(state.expression, result));
+    emit(MathExpression(result, ''));
   }
 
-  @override
-  void onChange(Change<MathExpression> change) {
-    super.onChange(change);
-
-    print(
-        'current state: ${change.currentState.expression} ${change.currentState.result}');
-    print(
-        'next state: ${change.nextState.expression} ${change.nextState.result}');
-  }
+  // @override
+  // void onChange(Change<MathExpression> change) {
+  //   super.onChange(change);
+  //   print(
+  //       'current state: ${change.currentState.expression} ${change.currentState.result}');
+  //   print(
+  //       'next state: ${change.nextState.expression} ${change.nextState.result}');
+  // }
 }

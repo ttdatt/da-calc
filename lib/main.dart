@@ -1,10 +1,10 @@
-import 'package:da_calc/calculator/calculator.dart';
-import 'package:da_calc/calculator_observer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:da_calc/calculator/calculator.dart';
+// import 'package:da_calc/calculator_observer.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  Bloc.observer = const CalculatorObserver();
+  // Bloc.observer = const CalculatorObserver();
   runApp(const MyApp());
 }
 

@@ -2,6 +2,8 @@ import 'package:da_calc/calculator/cubit/calculator_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+const SPACING = 4.0;
+
 class CalculatorWidget extends StatelessWidget {
   const CalculatorWidget({super.key});
 
@@ -16,8 +18,10 @@ class CalculatorWidget extends StatelessWidget {
           body: Column(
             children: [
               const ExpressionDisplay(),
+              const SizedBox(height: SPACING),
               Row(
                 children: [
+                  const SizedBox(width: SPACING),
                   CalculatorButton(
                     text: 'C',
                     onPressed: (cubit) {
@@ -26,100 +30,127 @@ class CalculatorWidget extends StatelessWidget {
                     textStyle:
                         const TextStyle(fontSize: 32, color: Colors.indigo),
                   ),
+                  const SizedBox(width: SPACING),
                   const CalculatorButton(
                     text: '()',
                     textStyle: TextStyle(fontSize: 32, color: Colors.indigo),
                   ),
+                  const SizedBox(width: SPACING),
                   const CalculatorButton(
                     text: '%',
                     char: '%',
                     textStyle: TextStyle(fontSize: 32, color: Colors.indigo),
                   ),
+                  const SizedBox(width: SPACING),
                   const CalculatorButton(
                     text: '\u00F7',
                     char: '\u00F7',
                     textStyle: TextStyle(fontSize: 44, color: Colors.indigo),
                   ),
+                  const SizedBox(width: SPACING),
                 ],
               ),
+              const SizedBox(height: SPACING),
               Row(
                 children: const [
+                  SizedBox(width: SPACING),
                   CalculatorButton(
                     text: '7',
                     textStyle: TextStyle(fontSize: 32, color: Colors.black),
                   ),
+                  SizedBox(width: SPACING),
                   CalculatorButton(
                     text: '8',
                     textStyle: TextStyle(fontSize: 32, color: Colors.black),
                   ),
+                  SizedBox(width: SPACING),
                   CalculatorButton(
                     text: '9',
                     textStyle: TextStyle(fontSize: 32, color: Colors.black),
                   ),
+                  SizedBox(width: SPACING),
                   CalculatorButton(
                     text: '\u00D7',
                     char: '\u00D7',
                     textStyle: TextStyle(fontSize: 44, color: Colors.indigo),
                   ),
+                  SizedBox(width: SPACING),
                 ],
               ),
+              const SizedBox(height: SPACING),
               Row(
                 children: const [
+                  SizedBox(width: SPACING),
                   CalculatorButton(
                     text: '4',
                     textStyle: TextStyle(fontSize: 32, color: Colors.black),
                   ),
+                  SizedBox(width: SPACING),
                   CalculatorButton(
                     text: '5',
                     textStyle: TextStyle(fontSize: 32, color: Colors.black),
                   ),
+                  SizedBox(width: SPACING),
                   CalculatorButton(
                     text: '6',
                     textStyle: TextStyle(fontSize: 32, color: Colors.black),
                   ),
+                  SizedBox(width: SPACING),
                   CalculatorButton(
                     text: '\u2212',
                     char: '-',
                     textStyle: TextStyle(fontSize: 44, color: Colors.indigo),
                   ),
+                  SizedBox(width: SPACING),
                 ],
               ),
+              const SizedBox(height: SPACING),
               Row(
                 children: const [
+                  SizedBox(width: SPACING),
                   CalculatorButton(
                     text: '1',
                     textStyle: TextStyle(fontSize: 32, color: Colors.black),
                   ),
+                  SizedBox(width: SPACING),
                   CalculatorButton(
                     text: '2',
                     textStyle: TextStyle(fontSize: 32, color: Colors.black),
                   ),
+                  SizedBox(width: SPACING),
                   CalculatorButton(
                     text: '3',
                     textStyle: TextStyle(fontSize: 32, color: Colors.black),
                   ),
+                  SizedBox(width: SPACING),
                   CalculatorButton(
                     text: '+',
                     char: '+',
                     textStyle: TextStyle(fontSize: 44, color: Colors.indigo),
                   ),
+                  SizedBox(width: SPACING),
                 ],
               ),
+              const SizedBox(height: SPACING),
               Row(
                 children: [
+                  SizedBox(width: SPACING),
                   const CalculatorButton(
                     text: '0',
                     textStyle: TextStyle(fontSize: 32, color: Colors.black),
                   ),
+                  SizedBox(width: SPACING),
                   const CalculatorButton(
                     text: '00',
                     textStyle: TextStyle(fontSize: 32, color: Colors.black),
                   ),
+                  SizedBox(width: SPACING),
                   const CalculatorButton(
                     text: ',',
                     char: '.',
                     textStyle: TextStyle(fontSize: 32, color: Colors.indigo),
                   ),
+                  SizedBox(width: SPACING),
                   CalculatorButton(
                     text: '=',
                     onPressed: (cubit) {
@@ -130,6 +161,7 @@ class CalculatorWidget extends StatelessWidget {
                     textStyle:
                         const TextStyle(fontSize: 44, color: Colors.white),
                   ),
+                  SizedBox(width: SPACING),
                 ],
               )
             ],
@@ -203,19 +235,22 @@ class CalculatorButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        constraints: const BoxConstraints(minWidth: 85, minHeight: 85),
-        child: OutlinedButton(
-          style: buttonStyle ??
-              TextButton.styleFrom(backgroundColor: Colors.white70),
-          onPressed: () {
-            if (onPressed != null) {
-              onPressed?.call(context.read<CalculatorCubit>());
-            } else {
-              context.read<CalculatorCubit>().add(char ?? text);
-            }
-          },
-          child: Text(text, style: textStyle),
-        ));
+    return Expanded(
+      flex: 1,
+      child: Container(
+          constraints: const BoxConstraints(minWidth: 85, minHeight: 85),
+          child: OutlinedButton(
+            style: buttonStyle ??
+                TextButton.styleFrom(backgroundColor: Colors.white70),
+            onPressed: () {
+              if (onPressed != null) {
+                onPressed?.call(context.read<CalculatorCubit>());
+              } else {
+                context.read<CalculatorCubit>().add(char ?? text);
+              }
+            },
+            child: Text(text, style: textStyle),
+          )),
+    );
   }
 }
