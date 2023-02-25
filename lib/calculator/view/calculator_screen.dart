@@ -198,7 +198,7 @@ class CalculatorButton extends StatelessWidget {
   final String text;
   final String? char;
   final void Function(CalculatorCubit cubit)? onPressed;
-  final TextStyle? textStyle;
+  final TextStyle textStyle;
   final ButtonStyle? buttonStyle;
 
   @override
