@@ -40,15 +40,11 @@ class CalculatorCubit extends Cubit<MathExpression> {
     if (isLastCharacterNaN(state.expression) && isLastCharacterNaN(char)) {
       return;
     }
+
     if (isLastCharacterPercentSign(state.expression) &&
         isLastCharacterPercentSign(char)) return;
 
     var newExpression = state.expression + char;
-
-    if (newExpression.length == 1) {
-      emit(MathExpression(newExpression, ''));
-      return;
-    }
 
     dynamic result;
     try {
@@ -72,7 +68,7 @@ class CalculatorCubit extends Cubit<MathExpression> {
     Expression exp = p.parse(finalState);
     var result = exp.evaluate(EvaluationType.REAL, cm);
     result = f.format(result);
-    emit(MathExpression(result, ''));
+    emit(MathExpression(result, result));
   }
 
   // @override
