@@ -1,30 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:da_calc/calculator/cubit/utils.dart';
 
 class MathExpression {
   String expression;
   String result;
   MathExpression(this.expression, this.result);
-}
-
-bool isLastCharacterNaN(String expression) {
-  if (expression.isEmpty) return false;
-
-  var lastChar = expression[expression.length - 1];
-  if (lastChar == '%') return false;
-
-  try {
-    return num.parse(lastChar) is! int;
-  } catch (e) {
-    return true;
-  }
-}
-
-bool isLastCharacterPercentSign(String expression) {
-  if (expression.isEmpty) return false;
-  var lastChar = expression[expression.length - 1];
-  return lastChar == '%';
 }
 
 class CalculatorCubit extends Cubit<MathExpression> {
@@ -37,12 +19,7 @@ class CalculatorCubit extends Cubit<MathExpression> {
   void clear() => emit(MathExpression('', ''));
 
   void add(String char) {
-    if (isLastCharacterNaN(state.expression) && isLastCharacterNaN(char)) {
-      return;
-    }
-
-    if (isLastCharacterPercentSign(state.expression) &&
-        isLastCharacterPercentSign(char)) return;
+    if (!allowCharacter(state.expression, char)) return;
 
     var newExpression = state.expression + char;
 
