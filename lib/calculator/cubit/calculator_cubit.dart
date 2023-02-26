@@ -13,39 +13,88 @@ class CalculatorCubit extends Cubit<MathExpression> {
   final Parser p = Parser();
   final ContextModel cm = ContextModel();
   final NumberFormat f = NumberFormat('###.######');
+  var _openingParentheses = 0;
+  var _closedParentheses = 0;
 
   CalculatorCubit() : super(MathExpression('', ''));
+
+  dynamic _evaluate(String expression) {
+    final finalExpression = expression
+        .replaceAll('%', '/100')
+        .replaceAll('\u00D7', '*')
+        .replaceAll('\u00F7', '/');
+    try {
+      Expression exp = p.parse(finalExpression);
+      var result = exp.evaluate(EvaluationType.REAL, cm);
+      result = f.format(result);
+      return result;
+    } on FormatException catch (e) {
+      print(e.toString());
+    } catch (e) {}
+    return state.result;
+  }
+
+  String _decideWhichParenthesis(String expression, bool hasOpenParentheses) {
+    if (expression.isEmpty) {
+      _openingParentheses++;
+      return '(';
+    }
+
+    if (!hasOpenParentheses) {
+      if (isLastCharNumber(expression) ||
+          isLastCharPercentSign(expression) ||
+          isLastCharCloseParenthesis(expression)) {
+        expression += '\u00D7(';
+      } else if (isLastCharMathOperator(expression)) {
+        expression += '(';
+      }
+      _openingParentheses++;
+    } else {
+      if (isLastCharNumber(expression) ||
+          isLastCharPercentSign(expression) ||
+          isLastCharCloseParenthesis(expression)) {
+        expression += ')';
+        _closedParentheses++;
+      } else if (isLastCharMathOperator(expression) ||
+          isLastCharOpenParenthesis(expression)) {
+        expression += '(';
+        _openingParentheses++;
+      }
+    }
+    return expression;
+  }
 
   void clear() => emit(MathExpression('', ''));
 
   void add(String char) {
     if (!allowCharacter(state.expression, char)) return;
 
-    var newExpression = state.expression + char;
+    final newExpression = state.expression + char;
 
-    dynamic result;
-    try {
-      var finalExpression = newExpression.replaceAll('%', '/100');
-      finalExpression = finalExpression.replaceAll('\u00D7', '*');
-      finalExpression = finalExpression.replaceAll('\u00F7', '/');
-      Expression exp = p.parse(finalExpression);
-      result = exp.evaluate(EvaluationType.REAL, cm);
-      result = f.format(result);
-    } on FormatException catch (e) {
-      print(e.toString());
-    } catch (e) {}
-
-    emit(MathExpression(newExpression, result ?? state.result));
+    emit(MathExpression(
+        newExpression, _evaluate(newExpression) ?? state.result));
   }
 
   void update() {
-    var finalState = state.expression.replaceAll('%', '/100');
-    finalState = finalState.replaceAll('\u00D7', '*');
-    finalState = finalState.replaceAll('\u00F7', '/');
-    Expression exp = p.parse(finalState);
-    var result = exp.evaluate(EvaluationType.REAL, cm);
-    result = f.format(result);
+    final result = _evaluate(state.expression);
+
     emit(MathExpression(result, result));
+  }
+
+  void deleteChar() {
+    final finalExpression =
+        state.expression.substring(0, state.expression.length - 1);
+
+    emit(MathExpression(finalExpression, _evaluate(finalExpression)));
+  }
+
+  void addParenthesis() {
+    final hasOpenParentheses = _openingParentheses > _closedParentheses;
+    final finalExpression =
+        _decideWhichParenthesis(state.expression, hasOpenParentheses);
+
+    final result = _evaluate(finalExpression);
+    emit(MathExpression(finalExpression, result));
   }
 
   // @override

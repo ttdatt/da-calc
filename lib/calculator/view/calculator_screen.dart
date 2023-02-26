@@ -1,4 +1,6 @@
 import 'package:da_calc/calculator/cubit/calculator_cubit.dart';
+import 'package:da_calc/calculator/view/calculator_button.dart';
+import 'package:da_calc/calculator/view/calculator_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,9 +31,11 @@ class CalculatorWidget extends StatelessWidget {
                         const TextStyle(fontSize: 32, color: Colors.indigo),
                   ),
                   const SizedBox(width: spacing),
-                  const CalculatorButton(
-                    text: '()',
-                    textStyle: TextStyle(fontSize: 32, color: Colors.indigo),
+                  CalculatorButton(
+                    text: '( )',
+                    textStyle:
+                        const TextStyle(fontSize: 32, color: Colors.indigo),
+                    onPressed: (cubit) => cubit.addParenthesis(),
                   ),
                   const SizedBox(width: spacing),
                   const CalculatorButton(
@@ -157,90 +161,6 @@ class CalculatorWidget extends StatelessWidget {
                 ],
               )
             ],
-          )),
-    );
-  }
-}
-
-class ExpressionDisplay extends StatelessWidget {
-  const ExpressionDisplay({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final expressionController = TextEditingController();
-
-    expressionController.text =
-        context.read<CalculatorCubit>().state.expression;
-    return Card(
-      child: BlocListener<CalculatorCubit, MathExpression>(
-        listener: ((context, state) {
-          expressionController.text =
-              context.read<CalculatorCubit>().state.expression;
-        }),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: TextField(
-                autofocus: true,
-                maxLines: 1,
-                textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 40),
-                controller: expressionController,
-                decoration: const InputDecoration(
-                    border: InputBorder.none, hintText: ''),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-              child: BlocBuilder<CalculatorCubit, MathExpression>(
-                  builder: (ctx, state) {
-                return Text(
-                  state.result,
-                  style: const TextStyle(fontSize: 30, color: Colors.grey),
-                );
-              }),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CalculatorButton extends StatelessWidget {
-  const CalculatorButton(
-      {required this.text,
-      this.onPressed,
-      required this.textStyle,
-      this.char,
-      this.buttonStyle,
-      super.key});
-
-  final String text;
-  final String? char;
-  final void Function(CalculatorCubit cubit)? onPressed;
-  final TextStyle textStyle;
-  final ButtonStyle? buttonStyle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: Container(
-          constraints: const BoxConstraints(minWidth: 85, minHeight: 85),
-          child: OutlinedButton(
-            style: buttonStyle ??
-                TextButton.styleFrom(backgroundColor: Colors.white70),
-            onPressed: () {
-              if (onPressed != null) {
-                onPressed?.call(context.read<CalculatorCubit>());
-              } else {
-                context.read<CalculatorCubit>().add(char ?? text);
-              }
-            },
-            child: Text(text, style: textStyle),
           )),
     );
   }
