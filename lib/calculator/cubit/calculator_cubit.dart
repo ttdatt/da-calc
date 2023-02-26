@@ -64,7 +64,11 @@ class CalculatorCubit extends Cubit<MathExpression> {
     return expression;
   }
 
-  void clear() => emit(MathExpression('', ''));
+  void clear() {
+    _openingParentheses = 0;
+    _closedParentheses = 0;
+    emit(MathExpression('', ''));
+  }
 
   void add(String char) {
     if (!allowCharacter(state.expression, char)) return;
@@ -82,6 +86,12 @@ class CalculatorCubit extends Cubit<MathExpression> {
   }
 
   void deleteChar() {
+    final lastChar = state.expression[state.expression.length - 1];
+    if (isLastCharCloseParenthesis(lastChar)) {
+      _closedParentheses--;
+    } else if (isLastCharOpenParenthesis(lastChar)) {
+      _openingParentheses--;
+    }
     final finalExpression =
         state.expression.substring(0, state.expression.length - 1);
 
