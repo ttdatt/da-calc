@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:math_expressions/math_expressions.dart';
-import 'package:da_calc/calculator/cubit/utils.dart';
+import './utils.dart';
 
 class MathExpression {
   String expression;

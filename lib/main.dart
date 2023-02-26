@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:da_calc/calculator/calculator.dart';
+import './calculator/calculator.dart';
 // import 'package:da_calc/calculator_observer.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 
