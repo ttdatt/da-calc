@@ -35,16 +35,33 @@ class ExpressionDisplay extends StatelessWidget {
             Container(
               padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
               child: BlocBuilder<CalculatorCubit, MathExpression>(
-                  builder: (ctx, state) {
-                return Text(
-                  state.result,
-                  style: const TextStyle(fontSize: 30, color: Colors.grey),
-                );
-              }),
+                builder: (ctx, state) {
+                  return Text(
+                    state.result,
+                    style: const TextStyle(fontSize: 30, color: Colors.grey),
+                  );
+                },
+              ),
             ),
-            IconButton(
-                onPressed: () => context.read<CalculatorCubit>().deleteChar(),
-                icon: const Icon(Icons.backspace, color: Colors.indigo))
+            Row(children: [
+              Expanded(child: Container()),
+              Expanded(child: Container()),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => context.read<CalculatorCubit>().add('^'),
+                  style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Colors.transparent)),
+                  child: const Text('^',
+                      style: TextStyle(fontSize: 30, color: Colors.indigo)),
+                ),
+              ),
+              Expanded(
+                  child: IconButton(
+                      iconSize: 30,
+                      onPressed: () =>
+                          context.read<CalculatorCubit>().deleteChar(),
+                      icon: const Icon(Icons.backspace, color: Colors.indigo)))
+            ])
           ],
         ),
       ),

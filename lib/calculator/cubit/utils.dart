@@ -16,7 +16,8 @@ bool isLastCharMathOperator(String expression) {
   final result = lastChar == '-' ||
       lastChar == '+' ||
       lastChar == '\u00F7' ||
-      lastChar == '\u00D7';
+      lastChar == '\u00D7' ||
+      lastChar == '^';
   return result;
 }
 

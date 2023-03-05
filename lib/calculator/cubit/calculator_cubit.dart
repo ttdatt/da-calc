@@ -10,9 +10,9 @@ class MathExpression {
 }
 
 class CalculatorCubit extends Cubit<MathExpression> {
-  final Parser p = Parser();
-  final ContextModel cm = ContextModel();
-  final NumberFormat f = NumberFormat('###.######');
+  final Parser _p = Parser();
+  final ContextModel _cm = ContextModel();
+  final NumberFormat _numberFormatter = NumberFormat('###.######');
   var _openingParentheses = 0;
   var _closedParentheses = 0;
 
@@ -24,13 +24,15 @@ class CalculatorCubit extends Cubit<MathExpression> {
         .replaceAll('\u00D7', '*')
         .replaceAll('\u00F7', '/');
     try {
-      Expression exp = p.parse(finalExpression);
-      var result = exp.evaluate(EvaluationType.REAL, cm);
-      result = f.format(result);
+      Expression exp = _p.parse(finalExpression);
+      var result = exp.evaluate(EvaluationType.REAL, _cm);
+      result = _numberFormatter.format(result);
       return result;
     } on FormatException catch (e) {
       print(e.toString());
-    } catch (e) {}
+    } catch (e) {
+      print('something went wrong ${e.toString()}');
+    }
     return state.result;
   }
 
@@ -86,6 +88,8 @@ class CalculatorCubit extends Cubit<MathExpression> {
   }
 
   void deleteChar() {
+    if (state.expression.isEmpty) return;
+
     final lastChar = state.expression[state.expression.length - 1];
     if (isLastCharCloseParenthesis(lastChar)) {
       _closedParentheses--;
