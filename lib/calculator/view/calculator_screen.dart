@@ -27,14 +27,12 @@ class CalculatorWidget extends StatelessWidget {
                   CalculatorButton(
                     text: 'C',
                     onPressed: (cubit) => cubit.clear(),
-                    textStyle:
-                        const TextStyle(fontSize: 32, color: Colors.indigo),
+                    textStyle: const TextStyle(fontSize: 32, color: Colors.indigo),
                   ),
                   const SizedBox(width: spacing),
                   CalculatorButton(
                     text: '( )',
-                    textStyle:
-                        const TextStyle(fontSize: 32, color: Colors.indigo),
+                    textStyle: const TextStyle(fontSize: 32, color: Colors.indigo),
                     onPressed: (cubit) => cubit.addParenthesis(),
                   ),
                   const SizedBox(width: spacing),
@@ -152,10 +150,8 @@ class CalculatorWidget extends StatelessWidget {
                   CalculatorButton(
                     text: '=',
                     onPressed: (cubit) => cubit.update(),
-                    buttonStyle:
-                        TextButton.styleFrom(backgroundColor: Colors.indigo),
-                    textStyle:
-                        const TextStyle(fontSize: 44, color: Colors.white),
+                    buttonStyle: TextButton.styleFrom(backgroundColor: Colors.indigo),
+                    textStyle: const TextStyle(fontSize: 44, color: Colors.white),
                   ),
                   const SizedBox(width: spacing),
                 ],

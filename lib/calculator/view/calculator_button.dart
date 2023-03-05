@@ -25,8 +25,7 @@ class CalculatorButton extends StatelessWidget {
       child: Container(
           constraints: const BoxConstraints(minWidth: 85, minHeight: 85),
           child: OutlinedButton(
-            style: buttonStyle ??
-                TextButton.styleFrom(backgroundColor: Colors.white70),
+            style: buttonStyle ?? TextButton.styleFrom(backgroundColor: Colors.white70),
             onPressed: () {
               if (onPressed != null) {
                 onPressed?.call(context.read<CalculatorCubit>());

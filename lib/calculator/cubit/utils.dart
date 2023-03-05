@@ -49,8 +49,7 @@ bool isLastCharCloseParenthesis(String expression) {
 }
 
 bool isLastCharParenthesis(String expression) {
-  return isLastCharOpenParenthesis(expression) ||
-      isLastCharCloseParenthesis(expression);
+  return isLastCharOpenParenthesis(expression) || isLastCharCloseParenthesis(expression);
 }
 
 int allowNextCharacter(String expression) {
@@ -74,10 +73,7 @@ int allowNextCharacter(String expression) {
 
 bool allowCharacter(String expression, String char) {
   final result = allowNextCharacter(expression);
-  return ((result & CharacterType.number.value) > 0 &&
-          isLastCharNumber(char)) ||
-      ((result & CharacterType.percentSign.value) > 0 &&
-          isLastCharPercentSign(char)) ||
-      ((result & CharacterType.mathOperator.value) > 0 &&
-          isLastCharMathOperator(char));
+  return ((result & CharacterType.number.value) > 0 && isLastCharNumber(char)) ||
+      ((result & CharacterType.percentSign.value) > 0 && isLastCharPercentSign(char)) ||
+      ((result & CharacterType.mathOperator.value) > 0 && isLastCharMathOperator(char));
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:math_expressions/math_expressions.dart';
@@ -19,19 +20,17 @@ class CalculatorCubit extends Cubit<MathExpression> {
   CalculatorCubit() : super(MathExpression('', ''));
 
   dynamic _evaluate(String expression) {
-    final finalExpression = expression
-        .replaceAll('%', '/100')
-        .replaceAll('\u00D7', '*')
-        .replaceAll('\u00F7', '/');
+    final finalExpression =
+        expression.replaceAll('%', '/100').replaceAll('\u00D7', '*').replaceAll('\u00F7', '/');
     try {
       Expression exp = _p.parse(finalExpression);
       var result = exp.evaluate(EvaluationType.REAL, _cm);
       result = _numberFormatter.format(result);
       return result;
     } on FormatException catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     } catch (e) {
-      print('something went wrong ${e.toString()}');
+      debugPrint('something went wrong ${e.toString()}');
     }
     return state.result;
   }
@@ -57,8 +56,7 @@ class CalculatorCubit extends Cubit<MathExpression> {
           isLastCharCloseParenthesis(expression)) {
         expression += ')';
         _closedParentheses++;
-      } else if (isLastCharMathOperator(expression) ||
-          isLastCharOpenParenthesis(expression)) {
+      } else if (isLastCharMathOperator(expression) || isLastCharOpenParenthesis(expression)) {
         expression += '(';
         _openingParentheses++;
       }
@@ -77,8 +75,7 @@ class CalculatorCubit extends Cubit<MathExpression> {
 
     final newExpression = state.expression + char;
 
-    emit(MathExpression(
-        newExpression, _evaluate(newExpression) ?? state.result));
+    emit(MathExpression(newExpression, _evaluate(newExpression) ?? state.result));
   }
 
   void update() {
@@ -96,16 +93,15 @@ class CalculatorCubit extends Cubit<MathExpression> {
     } else if (isLastCharOpenParenthesis(lastChar)) {
       _openingParentheses--;
     }
-    final finalExpression =
-        state.expression.substring(0, state.expression.length - 1);
+    final finalExpression = state.expression.substring(0, state.expression.length - 1);
 
-    emit(MathExpression(finalExpression, _evaluate(finalExpression)));
+    emit(
+        MathExpression(finalExpression, finalExpression.isEmpty ? '' : _evaluate(finalExpression)));
   }
 
   void addParenthesis() {
     final hasOpenParentheses = _openingParentheses > _closedParentheses;
-    final finalExpression =
-        _decideWhichParenthesis(state.expression, hasOpenParentheses);
+    final finalExpression = _decideWhichParenthesis(state.expression, hasOpenParentheses);
 
     final result = _evaluate(finalExpression);
     emit(MathExpression(finalExpression, result));

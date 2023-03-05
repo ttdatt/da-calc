@@ -9,13 +9,11 @@ class ExpressionDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     final expressionController = TextEditingController();
 
-    expressionController.text =
-        context.read<CalculatorCubit>().state.expression;
+    expressionController.text = context.read<CalculatorCubit>().state.expression;
     return Card(
       child: BlocListener<CalculatorCubit, MathExpression>(
         listener: ((context, state) {
-          expressionController.text =
-              context.read<CalculatorCubit>().state.expression;
+          expressionController.text = context.read<CalculatorCubit>().state.expression;
         }),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -28,8 +26,7 @@ class ExpressionDisplay extends StatelessWidget {
                 textAlign: TextAlign.right,
                 style: const TextStyle(fontSize: 40),
                 controller: expressionController,
-                decoration: const InputDecoration(
-                    border: InputBorder.none, hintText: ''),
+                decoration: const InputDecoration(border: InputBorder.none, hintText: ''),
               ),
             ),
             Container(
@@ -49,17 +46,15 @@ class ExpressionDisplay extends StatelessWidget {
               Expanded(
                 child: OutlinedButton(
                   onPressed: () => context.read<CalculatorCubit>().add('^'),
-                  style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.transparent)),
-                  child: const Text('^',
-                      style: TextStyle(fontSize: 30, color: Colors.indigo)),
+                  style:
+                      OutlinedButton.styleFrom(side: const BorderSide(color: Colors.transparent)),
+                  child: const Text('^', style: TextStyle(fontSize: 30, color: Colors.indigo)),
                 ),
               ),
               Expanded(
                   child: IconButton(
                       iconSize: 30,
-                      onPressed: () =>
-                          context.read<CalculatorCubit>().deleteChar(),
+                      onPressed: () => context.read<CalculatorCubit>().deleteChar(),
                       icon: const Icon(Icons.backspace, color: Colors.indigo)))
             ])
           ],
