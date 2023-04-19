@@ -42,7 +42,6 @@ class ExpressionDisplay extends StatelessWidget {
             ),
             Row(children: [
               Expanded(child: Container()),
-              Expanded(child: Container()),
               Expanded(
                 child: OutlinedButton(
                   onPressed: () => context.read<CalculatorCubit>().add('^'),
@@ -51,6 +50,7 @@ class ExpressionDisplay extends StatelessWidget {
                   child: const Text('^', style: TextStyle(fontSize: 30, color: Colors.indigo)),
                 ),
               ),
+              Expanded(child: Container()),
               Expanded(
                   child: IconButton(
                       iconSize: 30,
